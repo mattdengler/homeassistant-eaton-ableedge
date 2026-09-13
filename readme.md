@@ -45,7 +45,9 @@ After creating a team:
 1. Navigate to **Manage your apps** / **My Apps**.
 2. Create a new app for this Home Assistant integration.
 3. Associate the app with the team.
-4. Request access to the relevant Eaton API product(s) for AbleEdge Breakers.
+4. Request access to the relevant Eaton API product(s) for AbleEdge Breakers. Specifically, request access to:
+   - AbleEdge Authorize API
+   - AbleEdge API
 5. Wait for any required Eaton API product-owner approval.
 6. Once enabled, collect the app credentials needed by the integration, such as:
    - Client ID
