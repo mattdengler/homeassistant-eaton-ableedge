@@ -50,10 +50,10 @@ After creating a team:
    - AbleEdge API
 5. Wait for any required Eaton API product-owner approval.
 6. Once enabled, collect the app credentials needed by the integration, such as:
-   - Client ID
-   - Client secret
-   - API key, if provided
-   - Any OAuth/token endpoint information from the API documentation
+   - App ID
+   - API Key
+   - API Secret
+   Take note of the expiration date!
 
 Do **not** commit Eaton credentials to this repository.
 
