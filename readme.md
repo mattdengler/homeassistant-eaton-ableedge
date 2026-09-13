@@ -53,7 +53,7 @@ After creating a team:
    - App ID
    - API Key
    - API Secret
-   Take note of the expiration date!
+   - Take note of the expiration date!
 
 Do **not** commit Eaton credentials to this repository.
 
