@@ -52,8 +52,7 @@ After creating a team:
 6. Once enabled, collect the app credentials needed by the integration, such as:
    - App ID
    - API Key
-   - API Secret
-   - Take note of the expiration date!
+   - API Secret (taking note of the expiration date!)
 
 ### 4. Create an AbleEdge organization
 
@@ -65,6 +64,7 @@ After the Eaton developer app has the required API access:
 4. Collect the organization details needed by the integration:
    - Organization ID
    - Client ID
+   - Generate a secret (taking note of the expiration date!)
 
 Do **not** commit Eaton credentials to this repository.
 
