@@ -55,6 +55,17 @@ After creating a team:
    - API Secret
    - Take note of the expiration date!
 
+### 4. Create an AbleEdge organization
+
+After the Eaton developer app has the required API access:
+
+1. Go to the AbleEdge Portal: https://ableedge-portal.eaton.com
+2. Log in with your Eaton account.
+3. Create a new Organization.
+4. Collect the organization details needed by the integration:
+   - Organization ID
+   - Client ID
+
 Do **not** commit Eaton credentials to this repository.
 
 ## Planned Home Assistant configuration
@@ -116,4 +127,5 @@ This integration is intended to be developed as a Home Assistant custom componen
 
 - Eaton Developer Portal - Get Started: https://developer.eaton.com/get-started
 - Eaton For Developers: https://www.eaton.com/us/en-us/digital/for-developer-partners.html
+- AbleEdge Portal: https://ableedge-portal.eaton.com
 - Home Assistant developer documentation: https://developers.home-assistant.io/
