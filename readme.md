@@ -2,7 +2,7 @@
 
 A custom Home Assistant integration for Eaton AbleEdge Breakers.
 
-> **Status:** Planning / initial setup. This repository is not yet a working Home Assistant integration.
+> **Status:** Initial working integration skeleton. The `custom_components/eaton_ableedge/` integration implements the API flow, config flow, coordinator, and basic entities described below, but has not yet been exercised against the live Eaton API with real credentials. See "Manual testing with real Eaton credentials" below.
 
 ## Goal
 
@@ -291,7 +291,7 @@ Potential future features:
 
 ## Repository layout
 
-Expected Home Assistant custom integration layout:
+Implemented Home Assistant custom integration layout:
 
 ```text
 custom_components/
@@ -302,11 +302,45 @@ custom_components/
     const.py
     coordinator.py
     api.py
+    entity.py
     sensor.py
     binary_sensor.py
-    switch.py
     diagnostics.py
+    strings.json
+    translations/
+      en.json
+tests/
+  conftest.py
+  test_api.py
+  test_config_flow.py
+  test_integration.py
 ```
+
+> Note: a `switch.py` platform (e.g. for remote breaker control) is not yet
+> implemented. The Eaton breaker management API used here is currently
+> treated as read-only; add a `switch` platform if/when a supported write
+> endpoint is confirmed.
+
+## Manual testing with real Eaton credentials
+
+1. Copy `custom_components/eaton_ableedge/` into your Home Assistant
+   `config/custom_components/` directory (or symlink it) and restart Home
+   Assistant.
+2. In the Home Assistant UI, go to **Settings → Devices & Services → Add
+   Integration** and search for "Eaton AbleEdge Breakers".
+3. Enter the values collected during the Eaton developer/AbleEdge portal
+   setup above: `API_KEY`, `API_SECRET`, `CLIENT_ID`,
+   `EATON_ACCOUNT_USERNAME`, `EATON_ACCOUNT_PASSWORD`, `ORGANIZATION_SECRET`,
+   and `BREAKER_ID`.
+4. On submit, the config flow performs the full API flow (OAuth token, user
+   login, organization token, and an initial breaker fetch) to validate the
+   credentials before creating the entry.
+5. Once set up, a device for the breaker should appear with sensors for
+   remote contact position, main handle position, signal strength, rated
+   current, firmware version, and IP address, plus binary sensors for
+   connectivity and load status. Data refreshes every 60 seconds.
+6. Use **Settings → Devices & Services → (entry) → Download diagnostics** to
+   confirm all secrets and tokens are redacted.
 
 ## Security notes
 
