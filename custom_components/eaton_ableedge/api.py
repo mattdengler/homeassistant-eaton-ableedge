@@ -103,6 +103,12 @@ class EatonAbleEdgeApiClient:
                     f"Invalid response from Eaton API ({url}): "
                     f"status {response.status}"
                 ) from err
+            _LOGGER.debug(
+                "Non-JSON response from Eaton API (%s): status %s: %s",
+                url,
+                response.status,
+                err,
+            )
 
         if response.status in (401, 403):
             raise EatonAbleEdgeAuthError(
@@ -239,9 +245,9 @@ class EatonAbleEdgeApiClient:
         except EatonAbleEdgeAuthError:
             if not retry_on_auth_error:
                 raise
-            # The organization token (or OAuth token backing it) may have
-            # expired or been revoked; force a refresh and retry once.
-            await self.async_get_oauth_token(force_refresh=True)
+            # The organization token may have expired or been revoked;
+            # force a refresh and retry once. If the underlying OAuth token
+            # itself is invalid, this call will raise an auth error too.
             await self.async_get_organization_token(force_refresh=True)
             return await self._async_get_breaker_data(
                 breaker_id, retry_on_auth_error=False

@@ -8,6 +8,7 @@ import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_API_KEY
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import (
@@ -49,11 +50,6 @@ _PASSWORD_FIELDS = {
 
 def _build_selector_schema() -> vol.Schema:
     """Build the schema, marking secret fields as password inputs."""
-    try:
-        from homeassistant.helpers import selector
-    except ImportError:  # pragma: no cover - very old HA fallback
-        return STEP_USER_DATA_SCHEMA
-
     schema: dict[Any, Any] = {}
     for key, validator in STEP_USER_DATA_SCHEMA.schema.items():
         if str(key) in _PASSWORD_FIELDS:
