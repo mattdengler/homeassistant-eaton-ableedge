@@ -40,6 +40,12 @@ MAX_API_REQUESTS_PER_HOUR = 100
 # integration's own polling never eats the entire hourly budget.
 MANUAL_TESTING_REQUEST_HEADROOM = 10
 # Budget the coordinator's polling to stay comfortably under the rate limit.
+# In steady state each poll only issues one breaker-data request (OAuth,
+# session, and organization tokens are cached and reused), so this budget is
+# treated as the automated request ceiling. Any periodic token refreshes
+# (e.g. the ~once/day OAuth renewal, or an organization-token retry after a
+# 401) are expected to be absorbed by the reserved headroom above rather than
+# being budgeted for explicitly.
 MAX_AUTOMATED_REQUESTS_PER_HOUR = (
     MAX_API_REQUESTS_PER_HOUR - MANUAL_TESTING_REQUEST_HEADROOM
 )
