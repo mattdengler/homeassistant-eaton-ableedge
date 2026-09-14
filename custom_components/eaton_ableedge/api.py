@@ -241,7 +241,6 @@ class EatonAbleEdgeApiClient:
                 raise
             # The organization token (or OAuth token backing it) may have
             # expired or been revoked; force a refresh and retry once.
-            self._organization_token = None
             await self.async_get_oauth_token(force_refresh=True)
             await self.async_get_organization_token(force_refresh=True)
             return await self._async_get_breaker_data(

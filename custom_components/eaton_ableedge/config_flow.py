@@ -7,6 +7,7 @@ from typing import Any
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_API_KEY
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import (
@@ -70,7 +71,7 @@ _SELECTOR_SCHEMA = _build_selector_schema()
 
 
 async def _async_validate_input(
-    hass: Any, data: dict[str, Any]
+    hass: HomeAssistant, data: dict[str, Any]
 ) -> None:
     """Validate the user input allows us to authenticate with Eaton."""
     session = async_get_clientsession(hass)
