@@ -24,12 +24,7 @@ async def async_get_config_entry_diagnostics(
     return {
         "entry_data": async_redact_data(dict(entry.data), REDACT_KEYS),
         "runtime_tokens": async_redact_data(
-            {
-                "oauth_token": client._oauth_token.value,  # noqa: SLF001
-                "session_access_token": client._session_access_token,  # noqa: SLF001
-                "organization_token": client._organization_token,  # noqa: SLF001
-            },
-            REDACT_KEYS,
+            client.get_cached_token_diagnostics(), REDACT_KEYS
         ),
         "breaker_data": async_redact_data(coordinator.data or {}, REDACT_KEYS),
     }

@@ -251,6 +251,18 @@ class EatonAbleEdgeApiClient:
 
         return data
 
+    def get_cached_token_diagnostics(self) -> dict[str, str | None]:
+        """Return the current in-memory token values, for diagnostics use only.
+
+        These values are never persisted; callers are responsible for
+        redacting them before including them in any diagnostics output.
+        """
+        return {
+            "oauth_token": self._oauth_token.value,
+            "session_access_token": self._session_access_token,
+            "organization_token": self._organization_token,
+        }
+
     async def async_validate_credentials(self) -> None:
         """Validate credentials end-to-end (used by the config flow).
 

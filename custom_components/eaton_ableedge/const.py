@@ -34,7 +34,10 @@ DEFAULT_TOKEN_LIFETIME_SECONDS = 86400
 
 DEFAULT_SCAN_INTERVAL = timedelta(seconds=60)
 
-# Keys that must always be redacted from diagnostics output.
+# Keys that must always be redacted from diagnostics output. These are the
+# specific config entry and in-memory token field names used by this
+# integration; kept specific (rather than generic single words like "token"
+# or "secret") so unrelated breaker/telemetry data is never over-redacted.
 REDACT_KEYS = {
     CONF_API_KEY,
     CONF_API_SECRET,
@@ -46,8 +49,4 @@ REDACT_KEYS = {
     "access_token",
     "session_access_token",
     "organization_token",
-    "authorization",
-    "password",
-    "token",
-    "secret",
 }
