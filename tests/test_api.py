@@ -123,6 +123,19 @@ async def test_auth_error_raised_on_401(hass, aioclient_mock) -> None:
         await client.async_get_oauth_token()
 
 
+async def test_auth_error_raised_on_401_with_unparsable_body(
+    hass, aioclient_mock
+) -> None:
+    """A 401 response with a non-JSON body should still raise an auth error."""
+    from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
+    aioclient_mock.post(OAUTH_TOKEN_URL, status=401, text="not json")
+    client = _make_client(async_get_clientsession(hass))
+
+    with pytest.raises(EatonAbleEdgeAuthError):
+        await client.async_get_oauth_token()
+
+
 async def test_connection_error_raised_on_500(hass, aioclient_mock) -> None:
     """A 500 response should raise EatonAbleEdgeConnectionError."""
     from homeassistant.helpers.aiohttp_client import async_get_clientsession

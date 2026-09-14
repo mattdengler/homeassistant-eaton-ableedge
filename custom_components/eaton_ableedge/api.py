@@ -98,6 +98,11 @@ class EatonAbleEdgeApiClient:
             data = await response.json(content_type=None)
         except (ValueError, ClientError) as err:
             data = None
+            if response.status in (401, 403):
+                raise EatonAbleEdgeAuthError(
+                    f"Eaton API authorization failed for {url} "
+                    f"(status {response.status})"
+                ) from err
             if response.status >= 400:
                 raise EatonAbleEdgeConnectionError(
                     f"Invalid response from Eaton API ({url}): "
