@@ -338,9 +338,30 @@ tests/
 5. Once set up, a device for the breaker should appear with sensors for
    remote contact position, main handle position, signal strength, rated
    current, firmware version, and IP address, plus binary sensors for
-   connectivity and load status. Data refreshes every 60 seconds.
+   connectivity and load status. Data refreshes every 40 seconds by default
+   (see "API rate limits" below).
 6. Use **Settings → Devices & Services → (entry) → Download diagnostics** to
    confirm all secrets and tokens are redacted.
+
+## API rate limits
+
+The Eaton developer free tier allows only **100 API requests per hour**. The
+integration only calls the breaker management endpoint on each poll (the
+OAuth, user login, and organization tokens are cached in memory and reused
+until they expire), so the `DataUpdateCoordinator`'s polling interval
+directly controls the request rate.
+
+- `MAX_API_REQUESTS_PER_HOUR` (100) and `MANUAL_TESTING_REQUEST_HEADROOM`
+  (10) in `const.py` define the budget: automated polling is capped at 90
+  requests/hour, reserving 10 requests/hour of headroom for manual testing
+  (e.g. curl or the Eaton developer portal) without risking a 429.
+- `DEFAULT_SCAN_INTERVAL` is derived from that budget (currently 40 seconds)
+  rather than hard-coded, so adjusting the constants in `const.py` keeps the
+  polling interval and the stated budget in sync.
+- If you need more manual testing headroom, increase
+  `MANUAL_TESTING_REQUEST_HEADROOM` (reserving more requests) or otherwise
+  adjust `DEFAULT_SCAN_INTERVAL` directly; just keep the total under
+  100/hour.
 
 ## Security notes
 

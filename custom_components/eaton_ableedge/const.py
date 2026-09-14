@@ -32,7 +32,21 @@ TOKEN_REFRESH_SAFETY_MARGIN_SECONDS = 300
 # Fallback lifetime to assume if the API does not return `expires_in`.
 DEFAULT_TOKEN_LIFETIME_SECONDS = 86400
 
-DEFAULT_SCAN_INTERVAL = timedelta(seconds=60)
+# The Eaton developer free tier is rate limited to this many API requests
+# per rolling hour, across all API calls (token, auth, and breaker requests).
+MAX_API_REQUESTS_PER_HOUR = 100
+# Reserve this many requests per hour of headroom for manual/ad-hoc testing
+# (e.g. curl or the Eaton developer portal "Try it" console) so the
+# integration's own polling never eats the entire hourly budget.
+MANUAL_TESTING_REQUEST_HEADROOM = 10
+# Budget the coordinator's polling to stay comfortably under the rate limit.
+MAX_AUTOMATED_REQUESTS_PER_HOUR = (
+    MAX_API_REQUESTS_PER_HOUR - MANUAL_TESTING_REQUEST_HEADROOM
+)
+
+DEFAULT_SCAN_INTERVAL = timedelta(
+    seconds=3600 // MAX_AUTOMATED_REQUESTS_PER_HOUR
+)
 
 # Keys that must always be redacted from diagnostics output. These are the
 # specific config entry and in-memory token field names used by this
