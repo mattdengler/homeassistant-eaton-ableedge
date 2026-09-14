@@ -46,7 +46,7 @@ _PASSWORD_FIELDS = {
 }
 
 
-def _selector_schema() -> vol.Schema:
+def _build_selector_schema() -> vol.Schema:
     """Build the schema, marking secret fields as password inputs."""
     try:
         from homeassistant.helpers import selector
@@ -62,6 +62,11 @@ def _selector_schema() -> vol.Schema:
         else:
             schema[key] = validator
     return vol.Schema(schema)
+
+
+# Computed once at module load time since the underlying schema and password
+# field set are both static.
+_SELECTOR_SCHEMA = _build_selector_schema()
 
 
 async def _async_validate_input(
@@ -114,7 +119,7 @@ class EatonAbleEdgeConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=_selector_schema(),
+            data_schema=_SELECTOR_SCHEMA,
             errors=errors,
         )
 
@@ -149,6 +154,6 @@ class EatonAbleEdgeConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="reauth_confirm",
-            data_schema=_selector_schema(),
+            data_schema=_SELECTOR_SCHEMA,
             errors=errors,
         )

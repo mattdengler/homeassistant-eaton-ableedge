@@ -218,10 +218,14 @@ class EatonAbleEdgeApiClient:
         self._organization_token = data["token"]
         return self._organization_token
 
-    async def async_get_breaker_data(
-        self, breaker_id: str, *, retry_on_auth_error: bool = True
-    ) -> dict[str, Any]:
+    async def async_get_breaker_data(self, breaker_id: str) -> dict[str, Any]:
         """Fetch breaker data for the configured breaker ID."""
+        return await self._async_get_breaker_data(breaker_id, retry_on_auth_error=True)
+
+    async def _async_get_breaker_data(
+        self, breaker_id: str, *, retry_on_auth_error: bool
+    ) -> dict[str, Any]:
+        """Fetch breaker data, optionally retrying once after a token refresh."""
         organization_token = await self.async_get_organization_token()
         headers = {
             "accept": "application/json",
@@ -240,7 +244,7 @@ class EatonAbleEdgeApiClient:
             self._organization_token = None
             await self.async_get_oauth_token(force_refresh=True)
             await self.async_get_organization_token(force_refresh=True)
-            return await self.async_get_breaker_data(
+            return await self._async_get_breaker_data(
                 breaker_id, retry_on_auth_error=False
             )
 
