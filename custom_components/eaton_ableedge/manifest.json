@@ -1,6 +1,6 @@
 {
   "domain": "eaton_ableedge",
-  "name": "Eaton AbleEdge Breakers",
+  "name": "Eaton AbleEdge",
   "codeowners": ["@mattdengler"],
   "config_flow": true,
   "documentation": "https://github.com/mattdengler/eaton-ableedge-homeassistant",
