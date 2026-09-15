@@ -2,7 +2,7 @@
 
 A custom Home Assistant integration for Eaton AbleEdge Breakers.
 
-> **Status:** Planning / initial setup. This repository is not yet a working Home Assistant integration.
+> **Status:** Initial working integration skeleton. The `custom_components/eaton_ableedge/` integration implements the API flow, config flow, coordinator, and basic entities described below, but has not yet been exercised against the live Eaton API with real credentials. See "Manual testing with real Eaton credentials" below.
 
 ## Goal
 
@@ -291,7 +291,7 @@ Potential future features:
 
 ## Repository layout
 
-Expected Home Assistant custom integration layout:
+Implemented Home Assistant custom integration layout:
 
 ```text
 custom_components/
@@ -302,11 +302,66 @@ custom_components/
     const.py
     coordinator.py
     api.py
+    entity.py
     sensor.py
     binary_sensor.py
-    switch.py
     diagnostics.py
+    strings.json
+    translations/
+      en.json
+tests/
+  conftest.py
+  test_api.py
+  test_config_flow.py
+  test_integration.py
 ```
+
+> Note: a `switch.py` platform (e.g. for remote breaker control) is not yet
+> implemented. The Eaton breaker management API used here is currently
+> treated as read-only; add a `switch` platform if/when a supported write
+> endpoint is confirmed.
+
+## Manual testing with real Eaton credentials
+
+1. Copy `custom_components/eaton_ableedge/` into your Home Assistant
+   `config/custom_components/` directory (or symlink it) and restart Home
+   Assistant.
+2. In the Home Assistant UI, go to **Settings → Devices & Services → Add
+   Integration** and search for "Eaton AbleEdge Breakers".
+3. Enter the values collected during the Eaton developer/AbleEdge portal
+   setup above: `API_KEY`, `API_SECRET`, `CLIENT_ID`,
+   `EATON_ACCOUNT_USERNAME`, `EATON_ACCOUNT_PASSWORD`, `ORGANIZATION_SECRET`,
+   and `BREAKER_ID`.
+4. On submit, the config flow performs the full API flow (OAuth token, user
+   login, organization token, and an initial breaker fetch) to validate the
+   credentials before creating the entry.
+5. Once set up, a device for the breaker should appear with sensors for
+   remote contact position, main handle position, signal strength, rated
+   current, firmware version, and IP address, plus binary sensors for
+   connectivity and load status. Data refreshes every 40 seconds by default
+   (see "API rate limits" below).
+6. Use **Settings → Devices & Services → (entry) → Download diagnostics** to
+   confirm all secrets and tokens are redacted.
+
+## API rate limits
+
+The Eaton developer free tier allows only **100 API requests per hour**. The
+integration only calls the breaker management endpoint on each poll (the
+OAuth, user login, and organization tokens are cached in memory and reused
+until they expire), so the `DataUpdateCoordinator`'s polling interval
+directly controls the request rate.
+
+- `MAX_API_REQUESTS_PER_HOUR` (100) and `MANUAL_TESTING_REQUEST_HEADROOM`
+  (10) in `const.py` define the budget: automated polling is capped at 90
+  requests/hour, reserving 10 requests/hour of headroom for manual testing
+  (e.g. curl or the Eaton developer portal) without risking a 429.
+- `DEFAULT_SCAN_INTERVAL` is derived from that budget (currently 40 seconds)
+  rather than hard-coded, so adjusting the constants in `const.py` keeps the
+  polling interval and the stated budget in sync.
+- If you need more manual testing headroom, increase
+  `MANUAL_TESTING_REQUEST_HEADROOM` (reserving more requests) or otherwise
+  adjust `DEFAULT_SCAN_INTERVAL` directly; just keep the total under
+  100/hour.
 
 ## Security notes
 

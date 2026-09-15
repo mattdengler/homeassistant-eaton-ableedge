@@ -1,0 +1,71 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Eaton AbleEdge",
+        "description": "Enter your Eaton developer app credentials, Eaton account login, and AbleEdge organization/breaker details.",
+        "data": {
+          "api_key": "API Key",
+          "api_secret": "API Secret",
+          "client_id": "Client ID",
+          "eaton_account_username": "Eaton Account Username",
+          "eaton_account_password": "Eaton Account Password",
+          "organization_secret": "Organization Secret",
+          "breaker_id": "Breaker ID"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate with Eaton AbleEdge",
+        "description": "Your Eaton credentials may have expired. Please re-enter them.",
+        "data": {
+          "api_key": "API Key",
+          "api_secret": "API Secret",
+          "client_id": "Client ID",
+          "eaton_account_username": "Eaton Account Username",
+          "eaton_account_password": "Eaton Account Password",
+          "organization_secret": "Organization Secret",
+          "breaker_id": "Breaker ID"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid authentication. Check your API key/secret, Eaton account credentials, and organization secret.",
+      "cannot_connect": "Failed to connect to the Eaton API.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This breaker is already configured.",
+      "reauth_successful": "Reauthentication was successful."
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "is_connected": {
+        "name": "Connected"
+      },
+      "load_status": {
+        "name": "Load status"
+      }
+    },
+    "sensor": {
+      "remote_contact_position": {
+        "name": "Remote contact position"
+      },
+      "main_handle_position": {
+        "name": "Main handle position"
+      },
+      "rssi": {
+        "name": "Signal strength"
+      },
+      "rated_current": {
+        "name": "Rated current"
+      },
+      "firmware_version": {
+        "name": "Firmware version"
+      },
+      "ip_address": {
+        "name": "IP address"
+      }
+    }
+  }
+}
