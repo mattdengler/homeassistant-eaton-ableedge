@@ -1,14 +1,15 @@
-<span style="color: red; font-weight: bold;">This project is under initial development and is not yet fully working and tested.</span>
+> [!CAUTION]
+> This project is under initial development and is not yet fully working and tested.
 
 # Eaton AbleEdge Home Assistant Integration
 
 A custom Home Assistant integration for Eaton AbleEdge Breakers.
 
-> **Status:** Initial working integration skeleton. The `custom_components/eaton_ableedge/` integration implements the API flow, config flow, coordinator, and basic entities described below, but ha[...]
+> **Status:** Initial working integration skeleton. The `custom_components/eaton_ableedge/` integration implements the API flow, config flow, coordinator, and basic entities described below, but has not yet been exercised against the live Eaton API with real credentials. See "Manual testing with real Eaton credentials" below.
 
 ## Goal
 
-This project will provide a Home Assistant integration for monitoring and controlling Eaton AbleEdge Breakers through Eaton's developer APIs, where supported by Eaton and by the user's Eaton accoun[...]
+This project will provide a Home Assistant integration for monitoring and controlling Eaton AbleEdge Breakers through Eaton's developer APIs, where supported by Eaton and by the user's Eaton account/API access.
 
 ## Eaton developer setup
 
@@ -88,11 +89,11 @@ The `API_SECRET` and `ORGANIZATION_SECRET` are only valid for one year. They are
 
 - Eaton secure apps: https://www.eaton.com/us/en-us/digital/secure/apps.html
 
-The integration should use Home Assistant's config entry storage for these values, mark secret fields as passwords in the config flow, and redact all credential values from logs, diagnostics, and [...]
+The integration should use Home Assistant's config entry storage for these values, mark secret fields as passwords in the config flow, and redact all credential values from logs, diagnostics, and error messages.
 
 ## Planned API flow
 
-The curl examples below describe the tested Eaton API behavior. The actual Home Assistant integration should implement this flow in Python using Home Assistant's async HTTP client rather than shel[...]
+The curl examples below describe the tested Eaton API behavior. The actual Home Assistant integration should implement this flow in Python using Home Assistant's async HTTP client rather than shelling out to `curl` or `base64`.
 
 ### Runtime credential names
 
@@ -143,7 +144,7 @@ curl -X POST "https://api.eaton.com/oauth/accesstoken?grant_type=client_credenti
 
 The response is JSON. Store the `access_token` value as `OAUTH_TOKEN` and use the `expires_in` value to determine when the token must be refreshed.
 
-This token should be refreshed before it expires. The observed flow requires generating it approximately once per day, but the integration should rely on the `expires_in` value and refresh with a[...]
+This token should be refreshed before it expires. The observed flow requires generating it approximately once per day, but the integration should rely on the `expires_in` value and refresh with a safety margin.
 
 ### Step 3: Authorize the Eaton user
 
@@ -375,7 +376,7 @@ directly controls the request rate.
 
 ## Development notes
 
-This integration is intended to be developed as a Home Assistant custom component first. Once stable, it can be evaluated against Home Assistant's integration quality scale and contribution requi[...]
+This integration is intended to be developed as a Home Assistant custom component first. Once stable, it can be evaluated against Home Assistant's integration quality scale and contribution requirements.
 
 ## References
 
