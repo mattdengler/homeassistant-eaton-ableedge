@@ -187,10 +187,10 @@ Example response:
 
 ```json
 {
-  "id": "ffabf727-d62b-4900-886b-946574e4dd66",
+  "id": "00000000-0000-0000-0000-000000000000",
   "metadata": {
-    "loadcenterId": "80a0a4ea-4123-432e-aaf1-6c900a569f4b",
-    "siteId": "0612467f-dfdc-4c00-acc6-15b513429f30"
+    "loadcenterId": "00000000-0000-0000-0000-000000000000",
+    "siteId": "00000000-0000-0000-0000-000000000000"
   },
   "status": {
     "remoteContactPosition": {
@@ -208,9 +208,9 @@ Example response:
   },
   "staticData": {
     "ratedCurrent": 60,
-    "serialNumber": "0000HA2605080127",
+    "serialNumber": "0000AA0000000000",
     "partNumber": "SBR260WGF",
-    "macAddress": "F0:24:F9:1A:F1:00"
+    "macAddress": "00:00:00:00:00:00"
   },
   "configuration": {
     "autoLoadShedEnabled": {
