@@ -13,18 +13,7 @@ from custom_components.eaton_ableedge.api import (
 )
 from custom_components.eaton_ableedge.const import DOMAIN
 
-USER_INPUT = {
-    "api_key": "api-key",
-    "api_secret": "api-secret",
-    "client_id": "client-id",
-    "eaton_account_username": "user@example.com",
-    "eaton_account_password": "password",
-    "organization_secret": "org-secret",
-    "breaker_id": "ffabf727-d62b-4900-886b-946574e4dd66",
-}
-
-
-async def test_user_flow_success(hass) -> None:
+async def test_user_flow_success(hass, config_data) -> None:
     """A valid configuration should create a config entry."""
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
@@ -36,14 +25,14 @@ async def test_user_flow_success(hass) -> None:
         new=AsyncMock(return_value=None),
     ):
         result = await hass.config_entries.flow.async_configure(
-            result["flow_id"], USER_INPUT
+            result["flow_id"], config_data
         )
 
     assert result["type"] is FlowResultType.CREATE_ENTRY
-    assert result["data"] == USER_INPUT
+    assert result["data"] == config_data
 
 
-async def test_user_flow_invalid_auth(hass) -> None:
+async def test_user_flow_invalid_auth(hass, config_data) -> None:
     """Auth errors should be surfaced as a form error."""
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
@@ -54,14 +43,14 @@ async def test_user_flow_invalid_auth(hass) -> None:
         new=AsyncMock(side_effect=EatonAbleEdgeAuthError("bad auth")),
     ):
         result = await hass.config_entries.flow.async_configure(
-            result["flow_id"], USER_INPUT
+            result["flow_id"], config_data
         )
 
     assert result["type"] is FlowResultType.FORM
     assert result["errors"] == {"base": "invalid_auth"}
 
 
-async def test_user_flow_cannot_connect(hass) -> None:
+async def test_user_flow_cannot_connect(hass, config_data) -> None:
     """Connection errors should be surfaced as a form error."""
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
@@ -72,7 +61,7 @@ async def test_user_flow_cannot_connect(hass) -> None:
         new=AsyncMock(side_effect=EatonAbleEdgeConnectionError("no connection")),
     ):
         result = await hass.config_entries.flow.async_configure(
-            result["flow_id"], USER_INPUT
+            result["flow_id"], config_data
         )
 
     assert result["type"] is FlowResultType.FORM

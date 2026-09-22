@@ -15,32 +15,6 @@ from custom_components.eaton_ableedge.const import (
     USER_LOGIN_URL,
 )
 
-BREAKER_ID = "ffabf727-d62b-4900-886b-946574e4dd66"
-
-SAMPLE_BREAKER_RESPONSE = {
-    "id": BREAKER_ID,
-    "status": {
-        "remoteContactPosition": {"val": "Open", "ts": 1789380404},
-        "mainHandlePosition": {"val": "Closed", "ts": 1788826286},
-        "loadStatus": {"val": False, "ts": 1789380405},
-    },
-    "staticData": {
-        "ratedCurrent": 60,
-        "serialNumber": "0000HA2605080127",
-        "partNumber": "SBR260WGF",
-        "macAddress": "F0:24:F9:1A:F1:00",
-    },
-    "configuration": {
-        "firmwareVersion": {"val": "25.11.05", "ts": 1787111141},
-        "ipAddress": {"val": "192.168.7.123", "ts": 1787111141},
-    },
-    "telemetryData": {
-        "rssi": {"val": -81, "ts": 1789386462},
-        "isConnected": {"val": True, "ts": 1789386481},
-    },
-}
-
-
 def _make_client(session) -> EatonAbleEdgeApiClient:
     return EatonAbleEdgeApiClient(
         session=session,
@@ -53,7 +27,7 @@ def _make_client(session) -> EatonAbleEdgeApiClient:
     )
 
 
-def _mock_success_chain(aioclient_mock) -> None:
+def _mock_success_chain(aioclient_mock, breaker_id, sample_breaker_response) -> None:
     aioclient_mock.post(
         OAUTH_TOKEN_URL,
         json={"access_token": "oauth-token-1", "expires_in": 3600},
@@ -67,8 +41,8 @@ def _mock_success_chain(aioclient_mock) -> None:
         json={"token": "org-token-1"},
     )
     aioclient_mock.get(
-        BREAKER_URL_TEMPLATE.format(breaker_id=BREAKER_ID),
-        json=SAMPLE_BREAKER_RESPONSE,
+        BREAKER_URL_TEMPLATE.format(breaker_id=breaker_id),
+        json=sample_breaker_response,
     )
 
 
@@ -80,26 +54,30 @@ async def test_basic_auth_value_matches_expected_base64(hass, aioclient_mock) ->
     assert client._basic_auth_value() == "YXBpLWtleTphcGktc2VjcmV0"
 
 
-async def test_full_auth_flow_and_breaker_fetch(hass, aioclient_mock) -> None:
+async def test_full_auth_flow_and_breaker_fetch(
+    hass, aioclient_mock, breaker_id, sample_breaker_response
+) -> None:
     """The client should walk the full auth chain and fetch breaker data."""
     from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-    _mock_success_chain(aioclient_mock)
+    _mock_success_chain(aioclient_mock, breaker_id, sample_breaker_response)
     client = _make_client(async_get_clientsession(hass))
 
-    data = await client.async_get_breaker_data(BREAKER_ID)
+    data = await client.async_get_breaker_data(breaker_id)
 
-    assert data == SAMPLE_BREAKER_RESPONSE
+    assert data == sample_breaker_response
     assert client._oauth_token.value == "oauth-token-1"
     assert client._session_access_token is None  # only requested via async_authorize_user
     assert client._organization_token == "org-token-1"
 
 
-async def test_oauth_token_is_cached(hass, aioclient_mock) -> None:
+async def test_oauth_token_is_cached(
+    hass, aioclient_mock, breaker_id, sample_breaker_response
+) -> None:
     """A second call should reuse the cached OAuth token."""
     from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-    _mock_success_chain(aioclient_mock)
+    _mock_success_chain(aioclient_mock, breaker_id, sample_breaker_response)
     client = _make_client(async_get_clientsession(hass))
 
     token1 = await client.async_get_oauth_token()
@@ -148,7 +126,7 @@ async def test_connection_error_raised_on_500(hass, aioclient_mock) -> None:
 
 
 async def test_breaker_fetch_retries_after_expired_org_token(
-    hass, aioclient_mock
+    hass, aioclient_mock, breaker_id
 ) -> None:
     """An expired org token should trigger a refresh and retry once."""
     from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -161,13 +139,13 @@ async def test_breaker_fetch_retries_after_expired_org_token(
         ORGANIZATION_TOKEN_URL,
         json={"token": "org-token-1"},
     )
-    breaker_url = BREAKER_URL_TEMPLATE.format(breaker_id=BREAKER_ID)
+    breaker_url = BREAKER_URL_TEMPLATE.format(breaker_id=breaker_id)
     aioclient_mock.get(breaker_url, status=401, json={"error": "unauthorized"})
 
     client = _make_client(async_get_clientsession(hass))
 
     with pytest.raises(EatonAbleEdgeAuthError):
-        await client.async_get_breaker_data(BREAKER_ID)
+        await client.async_get_breaker_data(breaker_id)
 
     # Initial attempt + one retry after forcing a token refresh.
     breaker_calls = [

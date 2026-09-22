@@ -378,6 +378,18 @@ directly controls the request rate.
 
 This integration is intended to be developed as a Home Assistant custom component first. Once stable, it can be evaluated against Home Assistant's integration quality scale and contribution requirements.
 
+Install the test dependencies and supply a valid breaker UUID at test runtime:
+
+```shell
+python -m pip install -r requirements-test.txt
+EATON_TEST_BREAKER_ID="<BREAKER_ID>" pytest
+```
+
+The test suite uses this value only in mocked URLs, config entries, and response
+data; it does not make requests to the Eaton API. You can alternatively pass
+`pytest --breaker-id "<BREAKER_ID>"`. Pytest exits with an explanatory error if
+the value is missing or is not a valid UUID.
+
 ## References
 
 - Eaton Developer Portal - Get Started: https://developer.eaton.com/get-started
