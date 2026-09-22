@@ -1,6 +1,8 @@
 > [!CAUTION]
 > This project is under initial development and is not yet fully working and tested.
 
+<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=mattdengler&repository=homeassistant-eaton-ableedge&category=integration"><img src="https://my.home-assistant.io/badges/hacs_repository.svg"></a>
+
 # Eaton AbleEdge Home Assistant Integration
 
 <a href="https://github.com/mattdengler/homeassistant-eaton-ableedge/releases"><img src="https://img.shields.io/github/v/release/mattdengler/homeassistant-eaton-ableedge?display_name=tag&sort=semver"></a>
