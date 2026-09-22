@@ -28,8 +28,8 @@ def pytest_configure(config: pytest.Config) -> None:
         )
 
     try:
-        config._eaton_test_breaker_id = str(UUID(breaker_id))
-    except (AttributeError, ValueError) as err:
+        config.option.breaker_id = str(UUID(breaker_id))
+    except ValueError as err:
         raise pytest.UsageError(
             f"--breaker-id/{BREAKER_ID_ENV_VAR} must be a valid UUID"
         ) from err
@@ -38,7 +38,7 @@ def pytest_configure(config: pytest.Config) -> None:
 @pytest.fixture(scope="session")
 def breaker_id(pytestconfig: pytest.Config) -> str:
     """Return the validated breaker ID supplied for tests."""
-    return pytestconfig._eaton_test_breaker_id
+    return pytestconfig.getoption("breaker_id")
 
 
 @pytest.fixture
