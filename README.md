@@ -1,13 +1,13 @@
 > [!CAUTION]
 > This project is under initial development and is not yet fully working and tested.
 
-<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=mattdengler&repository=homeassistant-eaton-ableedge&category=integration"><img src="https://my.home-assistant.io/badges/hacs_repository.svg"></a>
-
 # Eaton AbleEdge Home Assistant Integration
 
 <a href="https://github.com/mattdengler/homeassistant-eaton-ableedge/releases"><img src="https://img.shields.io/github/v/release/mattdengler/homeassistant-eaton-ableedge?display_name=tag&sort=semver"></a>
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-blue.svg)](https://github.com/custom-components/hacs)
 <a href="https://github.com/mattdengler/homeassistant-eaton-ableedge/blob/main/LICENSE"><img src="https://img.shields.io/github/license/mattdengler/homeassistant-eaton-ableedge"></a>
+
+<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=mattdengler&repository=homeassistant-eaton-ableedge&category=integration"><img src="https://my.home-assistant.io/badges/hacs_repository.svg"></a>
 
 A custom Home Assistant integration for Eaton AbleEdge Breakers.
 
