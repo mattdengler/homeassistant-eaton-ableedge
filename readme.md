@@ -382,13 +382,13 @@ Install the test dependencies and supply a valid breaker UUID at test runtime:
 
 ```shell
 python -m pip install -r requirements-test.txt
-EATON_TEST_BREAKER_ID="<BREAKER_ID>" pytest
+EATON_TEST_BREAKER_ID="<BREAKER_ID>" python -m pytest
 ```
 
 The test suite uses this value only in mocked URLs, config entries, and response
 data; it does not make requests to the Eaton API. You can alternatively pass
-`pytest --breaker-id "<BREAKER_ID>"`. Pytest exits with an explanatory error if
-the value is missing or is not a valid UUID.
+`python -m pytest --breaker-id "<BREAKER_ID>"`. Pytest exits with an explanatory
+error if the value is missing or is not a valid UUID.
 
 ## References
 
