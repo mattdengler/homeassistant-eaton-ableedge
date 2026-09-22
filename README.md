@@ -3,6 +3,9 @@
 
 # Eaton AbleEdge Home Assistant Integration
 
+<a href="https://github.com/mattdengler/homeassistant-eaton-ableedge/releases"><img src="https://img.shields.io/github/v/release/mattdengler/homeassistant-eaton-ableedge?display_name=tag&sort=semver"></a>
+<a href="https://github.com/mattdengler/homeassistant-eaton-ableedge/blob/main/LICENSE"><img src="https://img.shields.io/github/license/mattdengler/homeassistant-eaton-ableedge"></a>
+
 A custom Home Assistant integration for Eaton AbleEdge Breakers.
 
 > **Status:** Initial working integration skeleton. The `custom_components/eaton_ableedge/` integration implements the API flow, config flow, coordinator, and basic entities described below, but has not yet been exercised against the live Eaton API with real credentials. See "Manual testing with real Eaton credentials" below.
