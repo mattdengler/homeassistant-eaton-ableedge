@@ -3,10 +3,10 @@
   "name": "Eaton AbleEdge",
   "codeowners": ["@mattdengler"],
   "config_flow": true,
-  "documentation": "https://github.com/mattdengler/eaton-ableedge-homeassistant",
+  "documentation": "https://github.com/mattdengler/homeassistant-eaton-ableedge",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/mattdengler/eaton-ableedge-homeassistant/issues",
+  "issue_tracker": "https://github.com/mattdengler/homeassistant-eaton-ableedge/issues",
   "requirements": [],
   "version": "0.1.0"
 }

@@ -312,11 +312,6 @@ custom_components/
     strings.json
     translations/
       en.json
-tests/
-  conftest.py
-  test_api.py
-  test_config_flow.py
-  test_integration.py
 ```
 
 > Note: a `switch.py` platform (e.g. for remote breaker control) is not yet
@@ -377,18 +372,6 @@ directly controls the request rate.
 ## Development notes
 
 This integration is intended to be developed as a Home Assistant custom component first. Once stable, it can be evaluated against Home Assistant's integration quality scale and contribution requirements.
-
-Install the test dependencies and supply a valid breaker UUID at test runtime:
-
-```shell
-python -m pip install -r requirements-test.txt
-EATON_TEST_BREAKER_ID="<BREAKER_ID>" python -m pytest
-```
-
-The test suite uses this value only in mocked URLs, config entries, and response
-data; it does not make requests to the Eaton API. You can alternatively pass
-`python -m pytest --breaker-id "<BREAKER_ID>"`. Pytest exits with an explanatory
-error if the value is missing or is not a valid UUID.
 
 ## References
 
